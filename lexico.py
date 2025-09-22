@@ -38,13 +38,13 @@ class Lexico:
         (token, lexema, linha, coluna) = tokenCorrente
         msg = TOKEN.msg(token)
         if len(msg) > 7:
-            if len(lexema) >= 7:
+            if len(lexema) >= 8:
                 print(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
             else:
                 print(f'(token = {msg}\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})')
         else:
-            if len(lexema) >= 7:
-                print(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
+            if len(lexema) >= 8:
+                print(f'(token = {msg}\t\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
             else:
                 print(f'(token = {msg}\t\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})')
 
@@ -56,7 +56,6 @@ class Lexico:
         
         lin = self.linha
         col = self.coluna
-
         while True:
             if estado == 1:
                 if simbolo.isalpha():
@@ -143,7 +142,7 @@ class Lexico:
                     estado = 0
 
             elif estado == 2:
-                if simbolo.isalnum():
+                if simbolo.isalnum() or simbolo == '_':
                     estado = 2
                 else:
                     self.ungetchar(simbolo)
@@ -155,26 +154,31 @@ class Lexico:
                     estado = 3
                 
                 elif simbolo == '.':
-                    estado = 31
+                    estado = 31  # ponto visto, mas ainda não confirmou parte decimal
 
                 elif simbolo.isalpha():
-                    estado = 0 # erro, número não pode conter letras
+                    estado = 0  # erro: número não pode conter letras
                 
                 else:
                     self.ungetchar(simbolo)
                     return (TOKEN.valorInt, lexema, lin, col)
-            
-            elif estado == 31:
+
+            elif estado == 31:  # depois de ver um ponto, precisa de pelo menos um dígito
                 if simbolo.isdigit():
-                    estado = 31
+                    estado = 32  # agora sim, entrou na parte decimal
+                else:
+                    estado = 0  # erro: não tinha dígito depois do ponto
+
+            elif estado == 32:  # já leu pelo menos um dígito da parte decimal
+                if simbolo.isdigit():
+                    estado = 32  # continua lendo parte decimal
                 
-                elif simbolo.isalpha():
-                    estado = 0 # erro, número não pode conter letras
+                elif simbolo == '.' or simbolo.isalpha():
+                    estado = 0  # erro: dois pontos ou letra dentro do número
                 
                 else:
                     self.ungetchar(simbolo)
                     return (TOKEN.valorFloat, lexema, lin, col)
-                
             elif estado == 4:
                 if simbolo == '/':  # é comentário
                     # descarta até fim da linha
@@ -209,15 +213,26 @@ class Lexico:
                     self.ungetchar(simbolo) # não era maiorIgual, devolve o caractere
                     return (TOKEN.maior, lexema, lin, col)
             
-            elif estado == 8:
-                if simbolo == '\'':
+            elif estado == 8:  # dentro de um literal de char
+                if simbolo != '\'' and simbolo not in ['\n', '\r']:  
                     lexema += simbolo
-                    return (TOKEN.valorChar, lexema, lin, col)
-                
+                    simbolo = self.getchar()
+                    if simbolo == '\'':  # fecha corretamente
+                        lexema += simbolo
+                        return (TOKEN.valorChar, lexema, lin, col)
+                    else:
+                        estado = 0  # erro: não fechou com aspa
+                else:
+                    estado = 0  # erro: char vazio ou quebra de linha
             elif estado == 9:
+                
+                if simbolo == ';' or simbolo == '\0':
+                    estado = 0 # erro, string não pode terminar assim
+
                 if simbolo == '\"':
                     lexema += simbolo
                     return (TOKEN.valorString, lexema, lin, col)
+                
             
             elif estado == 10:
                 if simbolo == '=':
@@ -244,18 +259,18 @@ class Lexico:
                     return (TOKEN.erro, lexema, lin, col)
                 
             elif estado == 0:
-                if simbolo == '.' or simbolo.isalpha() or simbolo.isdigit():
+                if simbolo == '.' or simbolo.isalpha() or simbolo.isdigit() or simbolo == '\'':
                     estado = 0
                 else:
                     self.ungetchar(simbolo)
                     return (TOKEN.erro, lexema, lin, col)
                 
             if simbolo not in ['\n', '\r']:
-                if estado == 8 or estado == 9: # quando for string ele mantém os espaços em branco no lexema
-                    lexema += simbolo # evita adicionar quebra de linha
-                else:
-                    if simbolo not in [' ', '\t']: #quando não é string ele retira os espaços em branco do lexema
-                        lexema += simbolo  
+                if estado == 9:  # string
+                    lexema += simbolo
+                else:  # fora da string
+                    if simbolo not in [' ', '\t']:
+                        lexema += simbolo
             simbolo = self.getchar()
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ void main(){
     
     int x = 10;
     float y = 3.14;
-    char c = 'A';
+    char c_a = 'A';
     char s = "hello";
 
     if (x >= 10 && y < 4.0) {
