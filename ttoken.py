@@ -59,7 +59,7 @@ class TOKEN(IntEnum):
             11:'if',
             12:'else',
             13:'while',
-            14:'program',
+            14:'return', 
             15:'for',
             16:'break',
             17:'continue',
@@ -96,9 +96,6 @@ class TOKEN(IntEnum):
         reservadas = {
             'if': TOKEN.IF,
             'else': TOKEN.ELSE,
-            'and': TOKEN.AND,
-            'or': TOKEN.OR,
-            'not': TOKEN.NOT,
             'while': TOKEN.WHILE,
             'return': TOKEN.RETURN,
             'int': TOKEN.INT,
