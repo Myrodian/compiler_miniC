@@ -17,30 +17,29 @@ class TOKEN(IntEnum):
     FOR = 15
     BREAK = 16
     CONTINUE = 17
-    abrePar = 18
-    fechaPar = 19
-    virg = 20
-    ptoVirg = 21
-    pto = 22
-    atrib = 23
-    igual = 24
-    diferente = 25
-    menor = 26
-    menorIgual = 27
-    maior = 28
-    maiorIgual = 29
-    AND = 30
-    OR = 31
-    NOT = 32
-    mais = 33
-    menos = 34
-    multiplica = 35
-    divide = 36
-    modulo = 37
-    abreChave = 38
-    fechaChave = 39
-    abrecolchete = 40
-    fechacolchete = 41
+    abreParentese = 18
+    fechaParentese = 19
+    virgula = 20
+    pontoVirgula = 21
+    atribuicao = 22
+    igual = 23
+    diferente = 24
+    menor = 25
+    menorIgual = 26
+    maior = 27
+    maiorIgual = 28
+    AND = 29
+    OR = 30
+    NOT = 31
+    mais = 32
+    menos = 33
+    multiplica = 34
+    divide = 35
+    modulo = 36
+    abreChave = 37
+    fechaChave = 38
+    abrecolchete = 39
+    fechacolchete = 40
 
 
     @classmethod
@@ -67,26 +66,25 @@ class TOKEN(IntEnum):
             19:')',
             20:',',
             21:';',
-            22:'.',
-            23:'=',
-            24:'==',
-            25:'!=',
-            26:'<',
-            27:'<=',
-            28:'>',
-            29:'>=',
-            30:'&&', # and
-            31:'||', # or
-            32:'!', # not  
-            33:'+',
-            34:'-',
-            35:'*',
-            36:'/',
-            37:'%',
-            38:'{',
-            39:'}',
-            40:'[',
-            41:']',
+            22:'=',
+            23:'==',
+            24:'!=',
+            25:'<',
+            26:'<=',
+            27:'>',
+            28:'>=',
+            29:'&&', # and
+            30:'||', # or
+            31:'!', # not  
+            32:'+',
+            33:'-',
+            34:'*',
+            35:'/',
+            36:'%',
+            37:'{',
+            38:'}',
+            39:'[',
+            40:']',
 
         }
         return nomes[token]

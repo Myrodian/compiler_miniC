@@ -56,7 +56,11 @@ void main(){
     // 14) separador inesperado em meio a identificador
     int my,var = 3; // vírgula é token mas aqui cria ambiguidade proposital
 
-    // 15) cadeia com quebra de linha no meio (string multilinha sem fechamento)
+    // 15) cadeia com quebra de linha no meio (string multilinha sem fechamento) 
+    // essa string ta errada, deve ser:
+    char longstr1 = "uma string muito longa" +
+    "que quebra de linha sem fechar";
+    
     char longstr = "uma string muito longa
     que quebra de linha sem fechar";
 

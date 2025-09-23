@@ -226,12 +226,13 @@ class Lexico:
                     estado = 0  # erro: char vazio ou quebra de linha
             elif estado == 9:
                 
-                if simbolo == ';' or simbolo == '\0':
+                if simbolo == '\n':
                     estado = 0 # erro, string não pode terminar assim
 
                 if simbolo == '\"':
                     lexema += simbolo
                     return (TOKEN.valorString, lexema, lin, col)
+                
                 
             
             elif estado == 10:
@@ -274,7 +275,7 @@ class Lexico:
             simbolo = self.getchar()
 
 if __name__ == '__main__':
-    lexico = Lexico("teste.txt")
+    lexico = Lexico("teste_com_erros.txt")
     token = lexico.getToken()
     while(token[0] != TOKEN.eof):
         lexico.imprimeToken(token)
