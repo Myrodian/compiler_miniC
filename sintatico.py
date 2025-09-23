@@ -40,12 +40,13 @@ class Sintatico:
         else:
             # LAMBDA
             pass
+        
     def function(self): # Function -> Type ident ( ArgList ) CompoundStmt
         self.type()
         self.consome(TOKEN.ident)
-        self.consome(TOKEN.abrePar)
+        self.consome(TOKEN.abreParentese)
         self.argList()
-        self.consome(TOKEN.fechaPar)
+        self.consome(TOKEN.fechaParentese)
         self.compoundStmt()
 
     def type(self): # Type -> int | float | char
@@ -59,6 +60,7 @@ class Sintatico:
         else:
             # LAMBDA
             pass
+
     def restoArgList(self): # RestoArgList -> , Arg RestoArgList | LAMBDA
         if self.tokenLido[0] == TOKEN.virgula:
             self.consome(TOKEN.virgula)
@@ -67,6 +69,9 @@ class Sintatico:
         else:
             # LAMBDA
             pass
+
     def arg(self): # Arg -> Type IdentArg
-    
+        self.type()
+        self.identArg()
+
         
