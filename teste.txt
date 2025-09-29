@@ -1,10 +1,14 @@
 
-void main(){
-    
-    int x = 10;
-    float y = 3.14;
-    char c_a = 'A';
-    char s = "hello";
+int main(){
+    int x;
+    float y;
+    char c_a;
+    char s;
+
+    x = 10;
+    y = 3.14;
+    c_a = 'A';
+    s = "hello";
 
     if (x >= 10 && y < 4.0) {
         x = x + 1;
@@ -23,4 +27,6 @@ void main(){
     }
 
     array[0] = x * 2 % 5 / y;
+
+    return 0 ;
 }

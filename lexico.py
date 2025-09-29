@@ -104,10 +104,10 @@ class Lexico:
                     return (TOKEN.multiplica, simbolo, lin, col)
                 
                 elif simbolo == '(':
-                    return(TOKEN.abrePar, simbolo, lin, col)
+                    return(TOKEN.abreParentese, simbolo, lin, col)
                 
                 elif simbolo == ')':
-                    return(TOKEN.fechaPar, simbolo, lin, col)
+                    return(TOKEN.fechaParentese, simbolo, lin, col)
                 
                 elif simbolo == '{':
                     return(TOKEN.abreChave, simbolo, lin, col)
@@ -122,13 +122,10 @@ class Lexico:
                     return(TOKEN.fechacolchete, simbolo, lin, col)
 
                 elif simbolo == ',':
-                    return (TOKEN.virg, simbolo, lin, col)
+                    return (TOKEN.virgula, simbolo, lin, col)
 
                 elif simbolo == ';':
-                    return (TOKEN.ptoVirg, simbolo, lin, col)
-                
-                elif simbolo == '.':
-                    return (TOKEN.pto, simbolo, lin, col)
+                    return (TOKEN.pontoVirgula, simbolo, lin, col)
 
                 elif simbolo == '\0':
                     return (TOKEN.eof, '', self.linha, self.coluna)
@@ -195,7 +192,7 @@ class Lexico:
                     return (TOKEN.igual, lexema, lin, col)
                 else:
                     self.ungetchar(simbolo) # não era igualdade, devolve o caractere
-                    return (TOKEN.atrib, lexema, lin, col)
+                    return (TOKEN.atribuicao, lexema, lin, col)
             
             elif estado == 6:
                 if simbolo == '=':
