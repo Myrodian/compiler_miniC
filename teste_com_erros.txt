@@ -1,9 +1,13 @@
-void main(){
+int main(){
 
     // Declarações corretas
-    int x = 10;
-    float y = 3.14;
-    char c = 'A';
+    int x ;
+    float y ;
+    char c ;
+
+    x = 10;
+    y = 3.14;
+    c = 'A';
 
     // --- Situações intencionalmente erradas para testar o léxico ---
 

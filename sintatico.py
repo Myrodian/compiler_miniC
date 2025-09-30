@@ -18,20 +18,19 @@ class Sintatico:
 
     def consome(self, tokenAtual):
         (token, lexema, linha, coluna) = self.tokenLido
+
+        # 🔹 LOG: manda o token atual pro arquivo de saída
+        self.lexico.imprimeToken(self.tokenLido)
+
         if tokenAtual == token:
             self.tokenLido = self.lexico.getToken()
         else:
             msgTokenLido = TOKEN.msg(token)
             msgTokenAtual = TOKEN.msg(tokenAtual)
-            print(f"Erro na linha {linha}, coluna {coluna}: ")
-
-            if token == TOKEN.erro:
-                msg = lexema
-            else:
-                msg = msgTokenLido
-            print(f"Era esperado {msgTokenAtual} mas foi lido {msg}")
+            with open(self.lexico.arqSaida, "a", encoding="utf-8") as f:
+                f.write(f"Erro na linha {linha}, coluna {coluna}: ")
+                f.write(f"Era esperado {msgTokenAtual} mas foi lido {msgTokenLido}\n")
             raise Exception("Erro Sintático")
-
 
     def program(self): # Program ->  Function Program | LAMBDA
         if self.tokenLido[0] in (TOKEN.INT, TOKEN.FLOAT, TOKEN.CHAR):
@@ -376,7 +375,3 @@ class Sintatico:
         else:
             # LAMBDA
             pass
-
-if __name__ == "__main__":
-    s = Sintatico("teste.txt")
-    s.traduz()

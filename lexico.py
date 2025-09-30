@@ -1,7 +1,7 @@
 from ttoken import TOKEN
 
 class Lexico:
-    def __init__(self, arqFonte):
+    def __init__(self, arqFonte, arqSaida="log.txt"):
         self.arqFonte = arqFonte
         with open(self.arqFonte, 'r', encoding='utf-8') as f:
             self.fonte = f.read()
@@ -10,6 +10,8 @@ class Lexico:
         self.tokenLido = None
         self.linha = 1
         self.coluna = 0
+        self.arqSaida = arqSaida
+        open(self.arqSaida, "w", encoding="utf-8").close()  # limpa log
 
 
     def fimDoArquivo(self):
@@ -37,16 +39,18 @@ class Lexico:
     def imprimeToken(self, tokenCorrente):
         (token, lexema, linha, coluna) = tokenCorrente
         msg = TOKEN.msg(token)
-        if len(msg) > 7:
-            if len(lexema) >= 8:
-                print(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
+
+        with open(self.arqSaida, "a", encoding="utf-8") as f:
+            if len(msg) > 7:
+                if len(lexema) >= 8:
+                    f.write(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})\n')
+                else:
+                    f.write(f'(token = {msg}\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})\n')
             else:
-                print(f'(token = {msg}\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})')
-        else:
-            if len(lexema) >= 8:
-                print(f'(token = {msg}\t\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
-            else:
-                print(f'(token = {msg}\t\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})')
+                if len(lexema) >= 8:
+                    f.write(f'(token = {msg}\t\t lex = "{lexema}" \t lin = {linha} col = {coluna})\n')
+                else:
+                    f.write(f'(token = {msg}\t\t lex = "{lexema}" \t\t lin = {linha} col = {coluna})\n')
 
 
     def getToken(self):
@@ -270,11 +274,3 @@ class Lexico:
                     if simbolo not in [' ', '\t']:
                         lexema += simbolo
             simbolo = self.getchar()
-
-if __name__ == '__main__':
-    lexico = Lexico("teste_com_erros.txt")
-    token = lexico.getToken()
-    while(token[0] != TOKEN.eof):
-        lexico.imprimeToken(token)
-        token = lexico.getToken()
-    lexico.imprimeToken(token)
