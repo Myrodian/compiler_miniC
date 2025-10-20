@@ -35,7 +35,7 @@ class TOKEN(IntEnum):
     menos = 33
     multiplica = 34
     divide = 35
-    modulo = 36
+    resto = 36
     abreChave = 37
     fechaChave = 38
     abrecolchete = 39
@@ -111,57 +111,3 @@ class TOKEN(IntEnum):
         else:
             return TOKEN.ident
         
-
-    @classmethod
-    def tabelaOperacoes(cls):
-        return {
-            # operações aritméticas
-            frozenset({(TOKEN.INT, False), TOKEN.mais, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({(TOKEN.INT, False), TOKEN.menos, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({(TOKEN.INT, False), TOKEN.multiplica, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({(TOKEN.INT, False), TOKEN.divide, (TOKEN.INT, False)}): (TOKEN.FLOAT, False),
-            frozenset({(TOKEN.INT, False), TOKEN.modulo, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.mais, (TOKEN.FLOAT, False)}): (TOKEN.FLOAT, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.mais, (TOKEN.INT, False)}): (TOKEN.FLOAT, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.multiplica, (TOKEN.INT, False)}): (TOKEN.FLOAT, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.divide, (TOKEN.INT, False)}): (TOKEN.FLOAT, False),
-
-            # operações relacionais
-
-            frozenset({(TOKEN.INT, False), TOKEN.igual, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.diferente, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.menor, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.menorIgual, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.maior, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.maiorIgual, (TOKEN.INT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.igual, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.diferente, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.menor, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.menorIgual, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.maior, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.FLOAT, False), TOKEN.maiorIgual, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.STRING, False), TOKEN.igual, (TOKEN.STRING, False)}): (TOKEN.BOOLEAN, False), # terá essas operações para string????
-            frozenset({(TOKEN.STRING, False), TOKEN.diferente, (TOKEN.STRING, False)}): (TOKEN.BOOLEAN, False), # terá essas operações para string????
-            frozenset({(TOKEN.INT, False), TOKEN.igual, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.diferente, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.menor, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.menorIgual, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.INT, False), TOKEN.maior, (TOKEN.FLOAT, False)}): (TOKEN.BOOLEAN, False),
-            frozenset({(TOKEN.BOOLEAN, False), TOKEN.igual, (TOKEN.BOOLEAN, False)}): (TOKEN.BOOLEAN, False), # não temos o token boolean, vai ter?
-            frozenset({(TOKEN.BOOLEAN, False), TOKEN.diferente, (TOKEN.BOOLEAN, False)}): (TOKEN.BOOLEAN, False),# não temos o token boolean, vai ter?
-            frozenset({(TOKEN.BOOLEAN, False), TOKEN.AND, (TOKEN.BOOLEAN, False)}): (TOKEN.BOOLEAN, False),# não temos o token boolean, vai ter?
-            frozenset({(TOKEN.BOOLEAN, False), TOKEN.OR, (TOKEN.BOOLEAN, False)}): (TOKEN.BOOLEAN, False),# não temos o token boolean, vai ter?
-
-            # operações unárias
-            frozenset({TOKEN.mais, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({TOKEN.menos, (TOKEN.INT, False)}): (TOKEN.INT, False),
-            frozenset({TOKEN.mais, (TOKEN.FLOAT, False)}): (TOKEN.FLOAT, False),
-            frozenset({TOKEN.menos, (TOKEN.FLOAT, False)}): (TOKEN.FLOAT, False),
-
-            # valores hardcoded
-            frozenset([(TOKEN.INT, False)]): (TOKEN.INT, True),
-            frozenset([(TOKEN.FLOAT, False)]): (TOKEN.FLOAT, True),
-            # frozenset([(TOKEN.STRING, False)]): (TOKEN.STRING, True),
-            # frozenset([(TOKEN.TRUE, False)]): (TOKEN.BOOLEAN, False),
-            frozenset([(TOKEN.INT, False), (TOKEN.FLOAT, False)]): (TOKEN.FLOAT, True),
-        }

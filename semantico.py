@@ -1,4 +1,6 @@
 from ttoken import TOKEN
+from systemTypes import regras_tipos
+
 class Semantico:
     def __init__(self, nomeAlvo):
         # putchar, getchar, 
@@ -13,7 +15,7 @@ class Semantico:
         self.declara("putstr", (TOKEN.FUNCTION, [[TOKEN.CHAR, True], [TOKEN.CHAR, True]])) # putstr(char x[])
         
         # Tabela de operações usando apenas tokens para o operador
-        self.tabelaOperacoes = TOKEN.tabelaOperacoes()
+        self.tabelaOperacoes = regras_tipos()
 
     def finaliza(self):
         self.alvo.close()
@@ -76,3 +78,5 @@ class Semantico:
         identacao = ' ' * 4 * nivel
         linha = identacao + codigo
         self.alvo.write(linha)
+
+    
