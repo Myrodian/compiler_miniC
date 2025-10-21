@@ -1,19 +1,29 @@
 from ttoken import TOKEN
 
+# ---------------------------------------------------------------- #
+# Parte 1: Definição de Símbolos e a Tabela que os armazena
+# ---------------------------------------------------------------- #
+
+""" 'ficha de cadastro' que guarda todos os detalhes (nome, tipo, categoria)
+ de uma única variável ou função. """
 class Symbol:
     def __init__(self, name, category, sym_type, is_array=False, params=None):
-        self.name = name
-        self.category = category
-        self.sym_type = sym_type
-        self.is_array = is_array
-        self.params = params if params is not None else []
+        self.name = name # Nome do identificador
+        self.category = category # Natureza do símbolo, variável ou função
+        self.sym_type = sym_type # Tipo do dado (TOKEN.INT, etc) ou retorno, se for função
+        self.is_array = is_array # Booleano, se é vetor ou não
+        self.params = params if params is not None else [] # Lista de parâmetros, se for função
 
     def __str__(self):
+        # Este metodo define o que será impresso ao usar print(objeto_symbol).
+
+        # Se o símbolo for uma função...
         if self.category == 'funcao':
+            # ...cria uma string formatada mostrando o tipo de retorno e o número de parâmetros.
             return f"Symbol(Name: {self.name}, Category: {self.category}, ReturnType: {TOKEN.msg(self.sym_type)}, Params: {len(self.params)})"
         else:
+            # ...para qualquer outro caso (como 'variavel'), cria uma string mostrando o tipo e se é um vetor.
             return f"Symbol(Name: {self.name}, Category: {self.category}, Type: {TOKEN.msg(self.sym_type)}, IsArray: {self.is_array})"
-
 
 """ 'fichário inteligente' que organiza todas as fichas (Symbol) em uma pilha de pastas
  que representam os escopos. """
@@ -23,12 +33,11 @@ class SymbolTable:
 
     def enter_scope(self):
         self.scope_stack.append({}) # Entra em uma função ou bloco {} - topo da pilha
-        # print(">> Entrou em um novo escopo.")
+
 
     def leave_scope(self):
         if len(self.scope_stack) > 1:
             self.scope_stack.pop() # Sai de uma função ou bloco {}
-            # print("<< Saiu do escopo.")
 
     """ 'Cadastra' uma nova ficha (Symbol) na pasta que está no topo da pilha (o escopo atual),
      após verificar se já não existe uma com o mesmo nome. """
@@ -45,7 +54,8 @@ class SymbolTable:
             if name in scope:
                 return scope[name]
         return None
-     
+
+
 # ---------------------------------------------------------------- #
 # Parte 2: Regras de Tipo C-Style
 # ---------------------------------------------------------------- #
@@ -180,22 +190,7 @@ regras_operacoes_unarias = {
     (TOKEN.NOT, (TOKEN.CHAR, False)): (TOKEN.INT, False),  # !char -> !int -> int
 }
 
-# --- REGRAS PARA VALORES LITERAIS / HARD-CODED ---
-regras_valores_literais = {
-    frozenset({(TOKEN.INT, False)}): (TOKEN.INT, True),
-    frozenset({(TOKEN.FLOAT, False)}): (TOKEN.FLOAT, True),
-    frozenset({(TOKEN.CHAR, False)}): (TOKEN.CHAR, True),
 
-    # Combinações triviais (ex: int + float -> float)
-    frozenset({(TOKEN.INT, False), (TOKEN.FLOAT, False)}): (TOKEN.FLOAT, True),
-    frozenset({(TOKEN.CHAR, False), (TOKEN.INT, False)}): (TOKEN.INT, True),
-    frozenset({(TOKEN.CHAR, False), (TOKEN.FLOAT, False)}): (TOKEN.FLOAT, True),
-}
-# Unir tudo (se quiser um único dicionário)
-regras_tipos = {}
-regras_tipos.update(regras_operacoes_binarias)
-regras_tipos.update(regras_operacoes_unarias)
-regras_tipos.update(regras_valores_literais)
 # ---------------------------------------------------------------- #
 # Parte 3: Funções Auxiliares para o Parser
 # ---------------------------------------------------------------- #

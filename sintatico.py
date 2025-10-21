@@ -1,10 +1,12 @@
 from ttoken import TOKEN
 from lexico import Lexico
+from semantico import Semantico
 import traceback
 
 class Sintatico:
     def __init__(self, nomeArquivo):
         self.lexico = Lexico(nomeArquivo)
+        self.semantico = Semantico(nomeArquivo)
 
     def traduz(self):
         self.tokenLido = self.lexico.getToken()
@@ -81,9 +83,11 @@ class Sintatico:
             # LAMBDA
             pass
     def compoundStmt(self): # CompoundStmt ->  { StmtList }
+        self.semantico.entra_escopo()
         self.consome(TOKEN.abreChave)
         self.stmtList()
         self.consome(TOKEN.fechaChave)
+        self.semantico.sai_escopo()
 
     def stmtList(self): # StmtList ->  Stmt StmtList | LAMBDA
         predict_set = (TOKEN.BREAK, TOKEN.CONTINUE,TOKEN.RETURN,TOKEN.pontoVirgula, TOKEN.FOR, TOKEN.IF,TOKEN.WHILE, TOKEN.abreChave,TOKEN.INT, TOKEN.FLOAT, 
@@ -184,13 +188,17 @@ class Sintatico:
             # LAMBDA
             pass
     def declaration(self): # Declaration -> Type IdentList ;
-        self.type()
-        self.identList()
+        tipo = self.type()
+        nomes = self.identList()
+        for nome, is_array in nomes:
+            self.semantico.declara(nome,(tipo, is_array))
         self.consome(TOKEN.pontoVirgula)
     
     def type(self): # Type -> int | float | char
         if self.tokenLido[0] in (TOKEN.INT, TOKEN.FLOAT, TOKEN.CHAR):
+            tipo = self.tokenLido[0]
             self.consome(self.tokenLido[0])
+            return tipo
     
     def identList(self): # IdentList -> IdentDeclar RestoIdentList
         self.identDeclar()
@@ -218,17 +226,18 @@ class Sintatico:
             pass
     
     def expr(self): # Expr -> Log RestoExpr
-        self.log()
-        self.restoExpr()
+        tipo_esq = self.log()
+        tipo = self.restoExpr(tipo_esq)
+        return tipo
 
-    def restoExpr(self): # RestoExpr ->  = Expr RestoExpr | LAMBDA
+    def restoExpr(self, tipo_esq): # RestoExpr ->  = Expr RestoExpr | LAMBDA
         if self.tokenLido[0] == TOKEN.atribuicao:
             self.consome(TOKEN.atribuicao)
-            self.expr()
-            self.restoExpr()
-        else:
-            # LAMBDA
-            pass
+            tipo_dir = self.expr()
+            if not self.semantico.verifica_tipo(tipo_esq, tipo_dir):
+                self.semantico.erro_semantico(self.tokenLido, "Atribuição incompatível de tipos.")
+            return tipo_esq
+        return tipo_esq
 
     def log(self): # Log -> Nao RestoLog
         self.nao()

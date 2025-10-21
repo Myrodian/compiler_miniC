@@ -15,7 +15,7 @@ class Tradutor:
 # inicia a traducao
 if __name__ == '__main__':
     try:
-        x = Tradutor('teste_com_erros.txt')
+        x = Tradutor('teste.txt')
         x.inicializa()
         x.traduz()
     except Exception as e:
